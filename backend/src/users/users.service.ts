@@ -29,6 +29,10 @@ export class UsersService {
 
   async update(id: string, userData: Partial<User>): Promise<User> {
     await this.usersRepository.update(id, userData);
-    return this.findById(id);
+    const user = await this.findById(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
 }

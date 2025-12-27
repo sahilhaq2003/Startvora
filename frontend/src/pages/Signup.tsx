@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { authAPI } from '../api/auth';
-import './Signup.css';
+// Tailwind CSS used instead of Signup.css
 
 export default function Signup() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -49,10 +51,8 @@ export default function Signup() {
       localStorage.setItem('token', result.token);
       localStorage.setItem('user', JSON.stringify(result.user));
 
-      alert(`Welcome to Startvora, ${result.user.firstName}! 🎉`);
-      
-      // TODO: Redirect to onboarding
-      console.log('Registration successful:', result);
+      // Redirect to dashboard
+      navigate('/dashboard');
 
     } catch (err: any) {
       setError(err.message || 'Registration failed. Please try again.');
@@ -62,23 +62,19 @@ export default function Signup() {
   };
 
   return (
-    <div className="signup-container">
-      <div className="signup-card">
-        <div className="signup-header">
-          <h1>🚀 Join Startvora</h1>
-          <p>Start your entrepreneurial journey today</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+        <div className="mb-8 text-center">
+          <h1 className="text-2xl font-bold text-blue-900 mb-2">🚀 Join Startvora</h1>
+          <p className="text-gray-500">Start your entrepreneurial journey today</p>
         </div>
-
-        <form onSubmit={handleSubmit} className="signup-form">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <div className="error-message">
-              {error}
-            </div>
+            <div className="bg-red-100 text-red-700 rounded p-2 text-sm mb-2">{error}</div>
           )}
-
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="firstName">First Name</label>
+          <div className="flex gap-4">
+            <div className="w-1/2">
+              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
               <input
                 id="firstName"
                 name="firstName"
@@ -88,11 +84,11 @@ export default function Signup() {
                 placeholder="John"
                 required
                 disabled={isLoading}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
-
-            <div className="form-group">
-              <label htmlFor="lastName">Last Name</label>
+            <div className="w-1/2">
+              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
               <input
                 id="lastName"
                 name="lastName"
@@ -102,12 +98,12 @@ export default function Signup() {
                 placeholder="Doe"
                 required
                 disabled={isLoading}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
           </div>
-
-          <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
             <input
               id="email"
               name="email"
@@ -117,11 +113,11 @@ export default function Signup() {
               placeholder="john@example.com"
               required
               disabled={isLoading}
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
-
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <input
               id="password"
               name="password"
@@ -131,12 +127,12 @@ export default function Signup() {
               placeholder="••••••••"
               required
               disabled={isLoading}
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
-            <small>Minimum 8 characters</small>
+            <small className="text-xs text-gray-400">Minimum 8 characters</small>
           </div>
-
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
+          <div>
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
             <input
               id="confirmPassword"
               name="confirmPassword"
@@ -146,21 +142,19 @@ export default function Signup() {
               placeholder="••••••••"
               required
               disabled={isLoading}
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
-
-          <label className="terms-checkbox">
-            <input type="checkbox" required />
-            <span>I agree to the <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a></span>
+          <label className="flex items-center gap-2 text-xs text-gray-500">
+            <input type="checkbox" required className="rounded" />
+            <span>I agree to the <a href="#terms" className="text-blue-600 hover:underline">Terms of Service</a> and <a href="#privacy" className="text-blue-600 hover:underline">Privacy Policy</a></span>
           </label>
-
-          <button type="submit" className="signup-button" disabled={isLoading}>
+          <button type="submit" disabled={isLoading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition-all duration-200">
             {isLoading ? 'Creating account...' : 'Create Account'}
           </button>
         </form>
-
-        <div className="login-prompt">
-          Already have an account? <a href="#login">Sign in</a>
+        <div className="text-center mt-6 text-sm text-gray-600">
+          Already have an account? <Link to="/login" className="text-blue-600 hover:underline">Sign in</Link>
         </div>
       </div>
     </div>
